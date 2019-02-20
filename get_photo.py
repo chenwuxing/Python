@@ -1,0 +1,36 @@
+import cv2
+
+
+
+def get_photo(model_path,photo_pos):
+    """
+    实现自动拍照功能
+    参数：
+    model_path:人脸检测模型的文件路径
+    photo_pos:图片的保存路径
+
+    """
+    video_capture = cv2.VideoCapture(0)
+    i = 0
+    #   定义分类器模型位置
+    model_path = ''
+    photo_pos = ''
+    while(True):
+        ret,frame = video_capture.read()
+        face_classifier = cv2.CascadeClassifier(model_path)
+        faceRects = classfier.detectMultiScale(frame, scaleFactor=1.2, minNeighbors=3, minSize=(32, 32))
+        if len(faceRects) == 1:
+            c += 1
+            if c % 10 == 0:
+                cv2.imwrite(photo_pos + str(i) + '.jpg',frame)
+            cv2.imshow('frame',frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    video_capture.release()
+    cv2.destroyAllWindows()
+
+if __name__ = '__main__':
+    main()
+
+
