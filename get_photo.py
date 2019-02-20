@@ -28,7 +28,6 @@ def get_photo(model_path,photo_pos):
     video_capture.release()
     cv2.destroyAllWindows()
 
-if __name__ = '__main__':
-    main()
+
 
 
