@@ -11,10 +11,7 @@ def get_photo(model_path,photo_pos):
 
     """
     video_capture = cv2.VideoCapture(0)
-    i = 0
-    #   定义分类器模型位置
-    model_path = ''
-    photo_pos = ''
+    c = 0
     while(True):
         ret,frame = video_capture.read()
         face_classifier = cv2.CascadeClassifier(model_path)
@@ -24,9 +21,10 @@ def get_photo(model_path,photo_pos):
             if c % 10 == 0:
                 cv2.imwrite(photo_pos + str(i) + '.jpg',frame)
             cv2.imshow('frame',frame)
-
+        #   按q键退出
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+    # 释放窗口资源
     video_capture.release()
     cv2.destroyAllWindows()
 
