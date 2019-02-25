@@ -48,6 +48,37 @@ class Fsolver():
                 img = cv2.imread(img_path)
                 res = cv2.resize(img,size,interpolation = cv2.INTER_CUBIC)
                 cv2.imwrite(output + im,res)
+                
+
+    @time_log
+    def get_photo(self,model_path,output):
+        """
+        功能：使用opencv自带的人脸分类器检测人脸并拍照
+        参数:
+            1.model_path为人脸分类器的文件路径
+            2.output为图像存储位置
+        """
+        video_capture = cv2.VideoCapture(0)
+        num = 0
+        while(True):
+            ret,frame = video_capture.read()
+            face_classifier = cv2.CascadeClassifier(model_path)
+            face_rects = face_classifier.detectMultiScale(frame,scaleFactor=1.2,minNeighbors=3,minSize=(32,32))
+            if len(face_rects) == 1:
+                num += 1
+                if num % 10 == 0:
+                    #   当output为已经存在的目录时，直接保存图片，否则先创建对应路径的目录，然后保存图片
+                    if os.path.exists(output):
+                        cv2.imwrite(output + str(num) + '.jpg',frame )
+                    else:
+                        os.makedirs(output)
+                        cv2.imwrite(output + str(num) + '.jpg',frame)
+                cv2.imshow('frame',frame)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            video_capture.release()
+            cv2.destroyAllWindows()
+
     
     def rename(self,output):
         """
