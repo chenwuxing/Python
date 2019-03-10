@@ -48,6 +48,7 @@ class Unordered_list:
         count = 0
         while current_node != None:
             count += 1
+            current = current.get_next()
         return count
     
     def search(self,element):
@@ -75,7 +76,7 @@ class Unordered_list:
             self.head = current.get_next()
         else:
             previous.set_next(current.get_next())
-            
+
     
     
 
