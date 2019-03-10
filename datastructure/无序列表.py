@@ -61,6 +61,22 @@ class Unordered_list:
             
         return found 
     
+    def remove(self,element):
+        current = self.head
+        previous = None
+        found = False
+        while not found:
+            if current.get_data() == element:
+                found = True
+            else:
+                previous = current
+                current = current.get_next()
+        if previous == None:
+            self.head = current.get_next()
+        else:
+            previous.set_next(current.get_next())
+            
+    
     
 
 
