@@ -1,6 +1,7 @@
 import os
 import cv2
 import time
+import numpy as np
 
 def time_log(func):
     """
@@ -34,7 +35,7 @@ class Fsolver():
         for file in os.listdir(self.path):
             if os.path.isdir(self.path + file):     #   判断给定路径下的文件是目录还是文件
                 sub_dir = self.path + file + '/'    #   子目录绝对路径
-                for im in os.listdir(sub_dir):      #   
+                for im in os.listdir(sub_dir):        
                     img_path = os.path.join(sub_dir + im)
                     img = cv2.imread(img_path)
                     res = cv2.resize(img,size,interpolation = cv2.INTER_CUBIC)
@@ -95,6 +96,50 @@ class Fsolver():
             else:
                 img_path = os.path.join(self.path,im)
                 img = cv2.imread(img_path)
+    
+    def img_preprocess(self,img_path):
+        im = cv2.imread(img_path,0)
+        # 使用sobel函数进行边缘检测
+        im_x = cv2.Sobel(im,cv2.CV_16S,1,0)
+        im_y = cv2.Sobel(im,cv2.CV_16S,0,1)
+        abs_x = cv2.convertScaleAbs(im_x)
+        abs_y = cv2.convertScaleAbs(im_y)
+        result = cv2.addWeighted(abs_x,0.5,abs_y,0.5,0)
+        result = self.gabor_filter(result)
+        _,img_name = os.path.split(img_path)
+        cv2.imwrite('G:/save/'+img_name,result)
+
+
+        # 构建gabor滤波器
+        
+
+        # cv2.imshow('image',result)
+    def gabor(self,ksize,lamda,sigma):
+        filters = []
+        for theta in np.array([0,np.pi/4,np.pi/2,np.pi*3/4]):
+            kernel = cv2.getGaborKernel((ksize,ksize),sigma,theta,lamda,
+                                        0.6,0,ktype=cv2.CV_32F)
+            filters.append(kernel)
+        return filters
+        
+    def gabor_filter(self,image):
+        img_filter = self.gabor(7,8,4)
+        for f in img_filter:
+            img = cv2.filter2D(image,cv2.CV_8UC3,f)
+        return img
+       
+
+
+
+        
+        
+        
+
+s = Fsolver('G:/test/')
+s.img_preprocess('G:/test/avatar.png')
+
+
+
 
 
 
