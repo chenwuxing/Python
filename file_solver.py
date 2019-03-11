@@ -43,7 +43,7 @@ class Fsolver():
                     if os.path.exists(save_dir):
                         cv2.imwrite(save_dir + im,res)
                     else:
-                        os.mkdir(save_dir)
+                        os.makedirs(save_dir)
                         cv2.imwrite(save_dir + im,res)
             else:
                 img_path = os.path.join(self.path,im)
