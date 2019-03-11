@@ -98,7 +98,7 @@ class Fsolver():
                 img_path = os.path.join(self.path,im)
                 img = cv2.imread(img_path)
     
-    def img_preprocess(self,img_path):
+    def img_preprocess(self,img_path,save_path):
         im = cv2.imread(img_path,0)
         # 使用sobel函数进行边缘检测
         im_x = cv2.Sobel(im,cv2.CV_16S,1,0)
@@ -108,13 +108,8 @@ class Fsolver():
         result = cv2.addWeighted(abs_x,0.5,abs_y,0.5,0)
         result = self.gabor_filter(result)
         _,img_name = os.path.split(img_path)
-        cv2.imwrite('G:/save/'+img_name,result)
-
-
-        # 构建gabor滤波器
+        cv2.imwrite(save_path + img_name,result)
         
-
-        # cv2.imshow('image',result)
     def gabor(self,ksize,lamda,sigma):
         filters = []
         for theta in np.array([0,np.pi/4,np.pi/2,np.pi*3/4]):
