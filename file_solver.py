@@ -33,17 +33,18 @@ class Fsolver():
 
         """
         for file in os.listdir(self.path):
+            save_dir = output + file + '/'
             if os.path.isdir(self.path + file):     #   判断给定路径下的文件是目录还是文件
                 sub_dir = self.path + file + '/'    #   子目录绝对路径
                 for im in os.listdir(sub_dir):        
                     img_path = os.path.join(sub_dir + im)
                     img = cv2.imread(img_path)
                     res = cv2.resize(img,size,interpolation = cv2.INTER_CUBIC)
-                    if os.path.exists(output):
-                        cv2.imwrite(output + im,res)
+                    if os.path.exists(save_dir):
+                        cv2.imwrite(save_dir + im,res)
                     else:
-                        os.makedirs(output)
-                        cv2.imwrite(output + im,res)
+                        os.mkdir(save_dir)
+                        cv2.imwrite(save_dir + im,res)
             else:
                 img_path = os.path.join(self.path,im)
                 img = cv2.imread(img_path)
