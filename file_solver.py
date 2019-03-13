@@ -2,6 +2,7 @@ import os
 import cv2
 import time
 import numpy as np
+import xml.etree.ElementTree as ET
 
 def time_log(func):
     """
@@ -123,6 +124,9 @@ class Fsolver():
         for f in img_filter:
             img = cv2.filter2D(image,cv2.CV_8UC3,f)
         return img
+        
+    
+
        
 
 
@@ -131,8 +135,14 @@ class Fsolver():
         
         
 
-s = Fsolver('G:/test/')
-s.img_preprocess('G:/test/avatar.png')
+if __name__ == '__main__':
+    s = Fsolver('G:/xml/')
+    for file in os.listdir(s.path):
+        sub_dir = s.path + file + '/'
+        for xml in os.listdir(sub_dir):
+            xml_abs_path = sub_dir + xml
+            a = s.analysis_xml(xml_abs_path)
+            s.write_xml_info('info.txt',a)
 
 
 
