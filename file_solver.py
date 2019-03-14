@@ -20,7 +20,7 @@ def time_log(func):
 
 
 
-class Fsolver():
+class Tools():
     def __init__(self,path):
         self.path = path
 
@@ -124,50 +124,70 @@ class Fsolver():
         for f in img_filter:
             img = cv2.filter2D(image,cv2.CV_8UC3,f)
         return img
-        
-    
-
-       
 
 
+    @staticmethod
+    def analysis_xml(xml_path):
+        """
+        功能：解析xml文件，得到需要的label信息
+        参数：
+            xml_path:xml文件路径
+        返回：字典形式的label信息
+        """
 
+        bndbox_list = ['xmin','ymin','xmax','ymax']
+        scale_info = []
+        xml_label_info = {}
+        tree = ET.parse(xml_path)
+        folder_info = tree.find('folder').text
+        # 需要填入txt文件的信息
+        filename_info = tree.find('filename').text
+        wider_file_info = folder_info + '/' + filename_info
+        # 寻找到object父节点，而后找到bndbox节点
+        object = tree.find('object')
+        bndbox = object.find('bndbox')
+        # 遍历bnd的孩子节点，将其孩子的信息存入scale_inof中
+        for i in bndbox_list:
+            scale_info.append(bndbox.find(i).text)
+        scale_info = [int(k) for k in scale_info]
+        scale_info[2:] = scale_info[2] - scale_info[0],scale_info[3] - scale_info[1]
+        scale_info = [str(j) for j in scale_info]
         
-        
-        
+        xml_label_info['filename'] = wider_file_info
+        xml_label_info['face_num'] = '1'
+        xml_label_info['scale_info'] = scale_info
+        xml_label_info['others'] = '0 0 0 0 0 0'
+        return xml_label_info
+
+
+    @staticmethod
+    def write_xml_info(file_name,label_info):
+        """
+        功能：将analysis返回的label信息写入txt文件
+        参数：
+            file_name:txt文件名
+            label_info:analysis返回的结果
+            默认采用追加模式
+        """
+        model = 'a'
+        str = ''
+        with open(file_name,model) as f:
+            f.writelines(label_info['filename'] + '\n')
+            f.writelines(label_info['face_num'] + '\n')
+            for i in label_info['scale_info']:
+                str += i + ' '
+            str = str + label_info['others']
+            f.writelines(str + '\n')
 
 if __name__ == '__main__':
-    s = Fsolver('G:/xml/')
-    for file in os.listdir(s.path):
-        sub_dir = s.path + file + '/'
+    
+    base = 'G:/xml/'
+    s = Tools(base)
+    for file in os.listdir(base):
+        sub_dir = base + file + '/'
         for xml in os.listdir(sub_dir):
             xml_abs_path = sub_dir + xml
             a = s.analysis_xml(xml_abs_path)
             s.write_xml_info('info.txt',a)
-
-
-
-
-
-
-
     
 
-    
-
-
-
-
-    
-
-
-
-
-        
-
-
-    
-
-
-
-
-        
