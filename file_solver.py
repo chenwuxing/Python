@@ -98,6 +98,7 @@ class Tools():
             else:
                 img_path = os.path.join(self.path,im)
                 img = cv2.imread(img_path)
+
     
     def img_preprocess(self,img_path,save_path):
         im = cv2.imread(img_path,0)
@@ -110,6 +111,7 @@ class Tools():
         result = self.gabor_filter(result)
         _,img_name = os.path.split(img_path)
         cv2.imwrite(save_path + img_name,result)
+
         
     def gabor(self,ksize,lamda,sigma):
         filters = []
@@ -118,6 +120,7 @@ class Tools():
                                         0.6,0,ktype=cv2.CV_32F)
             filters.append(kernel)
         return filters
+
         
     def gabor_filter(self,image):
         img_filter = self.gabor(7,8,4)
@@ -179,15 +182,34 @@ class Tools():
             str = str + label_info['others']
             f.writelines(str + '\n')
 
+
+    @staticmethod
+    def read_file(file_name,mode):
+        """
+        功能：读取文件，一次读取一行，是一个生成器函数
+              当调用read_file函数会返回一个迭代器对象
+        """
+        with open(file_name,mode) as f:
+            for line in f:
+                yield line
+    
+
+
 if __name__ == '__main__':
     
     base = 'G:/xml/'
     s = Tools(base)
-    for file in os.listdir(base):
-        sub_dir = base + file + '/'
-        for xml in os.listdir(sub_dir):
-            xml_abs_path = sub_dir + xml
-            a = s.analysis_xml(xml_abs_path)
-            s.write_xml_info('info.txt',a)
+    # for file in os.listdir(base):
+    #     sub_dir = base + file + '/'
+    #     for xml in os.listdir(sub_dir):
+    #         xml_abs_path = sub_dir + xml
+    #         a = s.analysis_xml(xml_abs_path)
+    #         s.write_xml_info('info.txt',a)
+    generator = s.read_file('C:/Users/wuxing/Desktop/NIR_s1.txt','r')
+    
+
+
+
+
     
 
