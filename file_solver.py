@@ -115,7 +115,13 @@ class Tools():
         
     def gabor(self,ksize,lamda,sigma):
         filters = []
-        for theta in np.array([0,np.pi/4,np.pi/2,np.pi*3/4]):
+        control = [0,np.pi/18,np.pi/9,np.pi/6,np.pi*2/9,np.pi*5/18,np.pi/3,np.pi*7/18,np.pi*4/9,
+                        np.pi/2,np.pi*5/9,np.pi*11/18,np.pi*2/3,np.pi*13/18,np.pi*7/9,np.pi*5/6,
+                        np.pi*8/9,np.pi*17/18,np.pi,np.pi*19/18,np.pi*10/9,np.pi*7/6,np.pi*11/9,
+                        np.pi*23/18,np.pi*4/3,np.pi*25/18,np.pi*13/9,np.pi*3/2,np.pi*14/9,np.pi*29/18,
+                        np.pi*5/3,np.pi*31/18,np.pi*16/9,np.pi*11/6,np.pi*17/9,np.pi*35/18,np.pi*2]
+        for theta in np.array(control):
+            print(theta)
             kernel = cv2.getGaborKernel((ksize,ksize),sigma,theta,lamda,
                                         0.6,0,ktype=cv2.CV_32F)
             filters.append(kernel)
@@ -123,7 +129,7 @@ class Tools():
 
         
     def gabor_filter(self,image):
-        img_filter = self.gabor(7,8,4)
+        img_filter = self.gabor(3,7,4)
         for f in img_filter:
             img = cv2.filter2D(image,cv2.CV_8UC3,f)
         return img
@@ -197,7 +203,7 @@ class Tools():
 
 if __name__ == '__main__':
     
-    base = 'G:/xml/'
+    base = 'G:/'
     s = Tools(base)
     # for file in os.listdir(base):
     #     sub_dir = base + file + '/'
@@ -205,7 +211,7 @@ if __name__ == '__main__':
     #         xml_abs_path = sub_dir + xml
     #         a = s.analysis_xml(xml_abs_path)
     #         s.write_xml_info('info.txt',a)
-    generator = s.read_file('C:/Users/wuxing/Desktop/NIR_s1.txt','r')
+    s.img_preprocess('G:/1_1.bmp','G:/test/')
     
 
 
