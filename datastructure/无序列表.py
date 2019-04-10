@@ -40,7 +40,7 @@ class Unordered_list:
     
     def add(self,element):
         tmp = Node(element)
-        tmp.set_next = self.head
+        tmp.set_next(self.head)
         self.head = tmp
     
     def size(self):
