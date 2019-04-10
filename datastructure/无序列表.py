@@ -46,10 +46,13 @@ class Unordered_list:
     def size(self):
         current_node = self.head
         count = 0
-        while current_node != None:
-            count += 1
-            current = current.get_next()
-        return count
+        if self.head == None:
+            return 0
+        else:
+            while current_node != None:
+                count += 1
+                current = current.get_next()
+            return count + 1
     
     def search(self,element):
         current_node = self.head
