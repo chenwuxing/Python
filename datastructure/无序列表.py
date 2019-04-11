@@ -1,93 +1,129 @@
-"""
-List():创建一个新的空列表。它不需要参数，并返回一个空列表。
-add(item):向列表中添加一个新项。它需要 item 作为参数，并不返回任何内容。假定该 item 不在列表中。
-remove(item):从列表中删除该项。它需要 item 作为参数并修改列表。假设项存在于列表中。
-search(item):搜索列表中的项目。它需要 item 作为参数，并返回一个布尔值。
-isEmpty():检查列表是否为空。它不需要参数，并返回布尔值。
-size():返回列表中的项数。它不需要参数，并返回一个整数。
-append(item):将一个新项添加到列表的末尾，使其成为集合中的最后一项。它需要 item 作为参数，并不返回任何内容。假定该项不在列表中。
-index(item):返回项在列表中的位置。它需要 item 作为参数并返回索引。假定该项在列表中。
-insert(pos，item):在位置 pos 处向列表中添加一个新项。它需要 item 作为参数并不返回任何内容。假设该项不在列表中，并且有足够的现有项使其有 pos 的位置。
-pop():删除并返回列表中的最后一个项。假设该列表至少有一个项。
-pop(pos):删除并返回位置 pos 处的项。它需要 pos 作为参数并返回项。假定该项在列表中。
-
-"""
-
-class Node:
-
-    def __init__(self,init_data):
-        self.data = init_data
+class SingleNode:
+    def __init__(self,elem):
+        self.elem = elem
         self.next = None
     
-    def get_data(self):
-        return self.data
-    
-    def set_data(self,new_data):
-        self.data = new_data
-    
-    def get_next(self):
-        return self.next
-    
-    def set_next(self,new_next):
-        self.next = new_next
 
-class Unordered_list:
-    def __init__(self):
-        self.head = None
+class SingleLinkList:
+    def __init__(self,node=None):
+        # 私有属性头结点
+        self.__head = node
     
-    def is_empty(self):
-        return self.head == None
-    
-    def add(self,element):
-        tmp = Node(element)
-        tmp.set_next(self.head)
-        self.head = tmp
-    
-    def size(self):
-        current_node = self.head
+    def length(self):
         count = 0
-        if self.head == None:
-            return 0
+        cur = self.__head
+        while cur != None:
+            count += 1
+            cur = cur.next
+        return count
+    
+    def travel(self):
+        cur = self.__head
+        print('[',end=' ')
+        while cur != None:
+            print(cur.elem,end=' ')
+            cur = cur.next
+        print(']')
+
+    def is_empty(self):
+        return self.__head == None
+    
+    def add(self,item):
+        node = SingleNode(item)
+        node.next = self.__head
+        self.__head = node
+    
+    def append(self,item):
+        node = SingleNode(item)
+        if self.is_empty():
+            # 如果是空节点
+            self.__head = node
         else:
-            while current_node != None:
+            cur = self.__head
+            while cur.next != None:
+                cur = cur.next
+            cur.next = node
+    
+    def insert(self,index,item):
+        if index <= 0:
+            self.add(item)
+        elif index > (self.length() - 1):
+            self.append(item)
+        else:
+            # 创建新结点
+            node = SingleNode(item)
+            # 遍历次数
+            count = 0
+            # 插入结点位置的上一个结点
+            prev = self.__head
+            # 查找到插入结点的上一个结点
+            while count <  (index - 1):
                 count += 1
-                current = current.get_next()
-            return count + 1
+                prev = prev.next
+            # 新结点的下一个结点为上一个结点的下一个结点
+            node.next = prev.next
+            # 上一个结点的下一个结点为新的结点
+            prev.next = node
     
-    def search(self,element):
-        current_node = self.head
-        found  = False
-        while current_node != None and not found:
-            if current_node.get_data() == element:
-                found  = True
-            else:
-                current_node = current_node.get_next()
-            
-        return found 
-    
-    def remove(self,element):
-        current = self.head
-        previous = None
+    def remove(self,item):
+        cur = self.__head
+        pre = None
         found = False
+
         while not found:
-            if current.get_data() == element:
+            if cur.elem == item:
                 found = True
             else:
-                previous = current
-                current = current.get_next()
-        if previous == None:
-            self.head = current.get_next()
+                pre = cur
+                cur = cur.next
+        if pre == None:
+            self.__head = self.__head.next
         else:
-            previous.set_next(current.get_next())
-
+            pre.next = cur.next
     
-    
+    def search(self,item):
+        cur = self.__head
+        while cur != None:
+            if cur.elem == item:
+                return True
+            else:
+                cur = cur.next
+        return False
 
+if __name__ == '__main__':
+    print('test:')
+    single_link_list = SingleLinkList()
 
+    print('--------判断是否为空-------')
+    print(single_link_list.is_empty())
 
+    print('-----------长度------------')
+    print(single_link_list.length())
 
+    single_link_list.append(2)
+    single_link_list.append(3)
+    single_link_list.append(5)
 
+    print('-----------遍历------------')
+    single_link_list.travel()
 
-    
+    single_link_list.add(1)
+    single_link_list.add(0)
+    single_link_list.insert(4, 4)
+    single_link_list.insert(-1, -1)
 
+    print('-----------遍历------------')
+    single_link_list.travel()
 
+    print('-----------查找------------')
+    print(single_link_list.search(49))
+
+    print('-----------删除------------')
+    single_link_list.remove(-1)
+
+    print('-----------遍历------------')
+    single_link_list.travel()
+
+    print('-----------长度------------')
+    print(single_link_list.length())
+        
