@@ -39,22 +39,25 @@ class BinaryTree:
                     return head
     
     def preorder_traverse(self,head):
-        if head:
-            print(head.data,end = ' ')
-            self.preorder_traverse(head.left)
-            self.preorder_traverse(head.right)
+        if head == None:
+            return
+        print(head.data,end = ' ')
+        self.preorder_traverse(head.left)
+        self.preorder_traverse(head.right)
     
     def inorder_traverse(self,head):
-        if head:
-            self.inorder_traverse(head.left)
-            print(head.data,end = ' ')
-            self.inorder_traverse(head.right)
+        if head == None:
+            return 
+        self.inorder_traverse(head.left)
+        print(head.data,end = ' ')
+        self.inorder_traverse(head.right)
     
     def postorder_traverse(self,head):
-        if head:
-            self.postorder_traverse(head.left)
-            self.postorder_traverse(head.right)
-            print(head.data,end = ' ')
+        if head == None:
+            return 
+        self.postorder_traverse(head.left)
+        self.postorder_traverse(head.right)
+        print(head.data,end = ' ')
 
 
 

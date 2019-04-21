@@ -82,58 +82,6 @@ class Tools():
             video_capture.release()
             cv2.destroyAllWindows()
 
-    
-    def rename(self,output):
-        """
-        功能：重命名文件
-        参数：
-            output:图片保存位置
-        """
-        for file in os.listdir(self.path):
-            if os.path.isdir(self.path + file):
-                sub_dir = self.path + file + '/'
-                for im in os.listdir(sub_dir):
-                    pass
-            
-            else:
-                img_path = os.path.join(self.path,im)
-                img = cv2.imread(img_path)
-
-    
-    def img_preprocess(self,img_path,save_path):
-        im = cv2.imread(img_path,0)
-        # 使用sobel函数进行边缘检测
-        im_x = cv2.Sobel(im,cv2.CV_16S,1,0)
-        im_y = cv2.Sobel(im,cv2.CV_16S,0,1)
-        abs_x = cv2.convertScaleAbs(im_x)
-        abs_y = cv2.convertScaleAbs(im_y)
-        result = cv2.addWeighted(abs_x,0.5,abs_y,0.5,0)
-        result = self.gabor_filter(result)
-        _,img_name = os.path.split(img_path)
-        cv2.imwrite(save_path + img_name,result)
-
-        
-    def gabor(self,ksize,lamda,sigma):
-        filters = []
-        control = [0,np.pi/18,np.pi/9,np.pi/6,np.pi*2/9,np.pi*5/18,np.pi/3,np.pi*7/18,np.pi*4/9,
-                        np.pi/2,np.pi*5/9,np.pi*11/18,np.pi*2/3,np.pi*13/18,np.pi*7/9,np.pi*5/6,
-                        np.pi*8/9,np.pi*17/18,np.pi,np.pi*19/18,np.pi*10/9,np.pi*7/6,np.pi*11/9,
-                        np.pi*23/18,np.pi*4/3,np.pi*25/18,np.pi*13/9,np.pi*3/2,np.pi*14/9,np.pi*29/18,
-                        np.pi*5/3,np.pi*31/18,np.pi*16/9,np.pi*11/6,np.pi*17/9,np.pi*35/18,np.pi*2]
-        for theta in np.array(control):
-            print(theta)
-            kernel = cv2.getGaborKernel((ksize,ksize),sigma,theta,lamda,
-                                        0.6,0,ktype=cv2.CV_32F)
-            filters.append(kernel)
-        return filters
-
-        
-    def gabor_filter(self,image):
-        img_filter = self.gabor(3,7,4)
-        for f in img_filter:
-            img = cv2.filter2D(image,cv2.CV_8UC3,f)
-        return img
-
 
     @staticmethod
     def analysis_xml(xml_path):
